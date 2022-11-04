@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox fx:id="mainWnd" alignment="CENTER" cacheShape="false" fillWidth="false" prefHeight="796.0" prefWidth="875.0" scaleShape="false" snapToPixel="false" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="apirequests.proj_u1.view.MainView">
+    <padding>
+        <Insets bottom="-100.0" left="20.0" right="20.0" top="-20.0" />
+    </padding>
+
+    <Label text="News API Search">
+        <VBox.margin>
+            <Insets bottom="20.0" top="-100.0" />
+        </VBox.margin>
+        <padding>
+            <Insets bottom="20.0" />
+        </padding>
+        <font>
+            <Font name="Noto Serif Bold" size="24.0" />
+        </font>
+    </Label>
+
+    <ComboBox fx:id="cboOptions" layoutX="-50.0" layoutY="-50.0" onAction="#searchBtnState" prefHeight="25.0" prefWidth="230.0" promptText="Select a category...">
+    </ComboBox>
+    <Pane prefHeight="35.0" prefWidth="667.0">
+        <children>
+            <Button fx:id="btnSearch" layoutX="279.0" layoutY="5.0" onAction="#updateInfo" prefHeight="25.0" prefWidth="110.0" text="Search" />
+        </children>
+    </Pane>
+
+    <TableView fx:id="resultTable" onMouseReleased="#mouseShortcuts" prefHeight="390.0" prefWidth="870.0" VBox.vgrow="NEVER">
+        <columns>
+
+        </columns>
+        <VBox.margin>
+            <Insets bottom="-100.0" />
+        </VBox.margin>
+    </TableView>
+   <Pane prefHeight="35.0" prefWidth="667.0">
+      <VBox.margin>
+         <Insets top="100.0" />
+      </VBox.margin>
+      <children>
+            <Button fx:id="btnSaveAll" layoutX="279.0" layoutY="5.0" mnemonicParsing="false" onAction="#saveRequest" prefHeight="25.0" prefWidth="110.0" text="Save all" />
+            <Button fx:id="btnSaveSelected" layoutX="421.0" layoutY="5.0" mnemonicParsing="false" onAction="#saveRequest" prefHeight="25.0" prefWidth="110.0" text="Save selected" textAlignment="JUSTIFY" />
+         <Button fx:id="btnLoadNews" layoutX="130.0" layoutY="5.0" mnemonicParsing="false" onAction="#updateInfo" prefHeight="25.0" prefWidth="110.0" text="Load file" />
+         <CheckBox fx:id="chkSaveSession" layoutX="578.0" layoutY="9.0" mnemonicParsing="false" onAction="#saveSession" selected="#FileUtils.config.isRestoreLastSession" text="Save Session" />
+      </children></Pane>
+
+
+</VBox>
