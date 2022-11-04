@@ -75,6 +75,46 @@ public class News implements Serializable {
 		return url;
 	}
 
+	public static void setCategories(String[] categories) {
+		News.categories = categories;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+	public void setReadMoreUrl(String readMoreUrl) {
+		this.readMoreUrl = readMoreUrl;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
 	@Override
 	public String toString() {
 		return "DataItem{" +

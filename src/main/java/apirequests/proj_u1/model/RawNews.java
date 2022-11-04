@@ -30,6 +30,10 @@ public class RawNews implements Serializable {
 		return category;
 	}
 
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
 	public List<News> getNews(){
 		return data;
 	}
@@ -40,6 +44,10 @@ public class RawNews implements Serializable {
 
 	public boolean isSuccess(){
 		return success;
+	}
+
+	public void setSuccess(boolean success) {
+		this.success = success;
 	}
 
 	@Override
