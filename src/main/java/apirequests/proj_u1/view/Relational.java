@@ -152,6 +152,6 @@ public class Relational {
     }
 
     public boolean login(String usr, String psd) {
-        return /*Request.checkLogin(usr, psd);*/ true;
+        return Request.checkLogin(usr, psd);
     }
 }

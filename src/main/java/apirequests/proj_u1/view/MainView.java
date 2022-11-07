@@ -1,12 +1,16 @@
 package apirequests.proj_u1.view;
 
+import apirequests.proj_u1.Main;
 import apirequests.proj_u1.mgmt.Log;
 import apirequests.proj_u1.model.News;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,9 +18,12 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.net.URL;
@@ -57,6 +64,9 @@ public class MainView implements Initializable {
     private PasswordField txtPsswd;
     @FXML
     private Label lblErrLogin;
+
+    @FXML
+    private AnchorPane ancView;
 
     /**
      * Contains the News to be displayed in the table
@@ -179,6 +189,33 @@ public class MainView implements Initializable {
     public void mouseShortcuts(MouseEvent mouseEvent) {
         try {
             if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
+                // Detailed View extends Stage -> No pone los datos de la News en los TextField -> error null
+                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("detailedView.fxml"));
+                Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+                DetailedView stage = new DetailedView((News) resultTable.getSelectionModel().getSelectedItem());
+                stage.setScene(scene);
+                stage.show();/**/
+
+                // Inicio desde esta clase
+                /*Stage stage = new Stage();
+                ancView = (AnchorPane) FXMLLoader.load(Main.class.getResource("detailedView.fxml"));
+                Scene scene = new Scene(ancView);
+                stage.setScene(scene);
+                stage.setTitle("Ventya");
+                stage.show();*/
+
+                // Iniciando el stage en la nueva clase para la vista_detalles
+                /*DetailedView detailedView = new DetailedView((News) resultTable.getSelectionModel().getSelectedItem());
+                detailedView.showStage();*/
+
+                // ...
+                /*DetailedView detailedView = new DetailedView((News) resultTable.getSelectionModel().getSelectedItem());
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("detailedView.fxml"));
+                loader.setController(detailedView);
+                Pane detail = loader.load();*/
+            }
+
+            if (mouseEvent.getButton().equals(MouseButton.MIDDLE)) {
                 Clipboard clipboard = Clipboard.getSystemClipboard();
                 ClipboardContent content = new ClipboardContent();
                 content.putString(((News) resultTable.getSelectionModel().getSelectedItem()).getReadMoreUrl());
@@ -198,6 +235,7 @@ public class MainView implements Initializable {
                     dlg.show();
                 }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             Log.writeErr("Table click error", e);
         }
     }
@@ -219,25 +257,22 @@ public class MainView implements Initializable {
     }
 
     public void loginAction(ActionEvent actionEvent) {
-        /*try {
-            System.out.println(txtUser.getText() + " - " + txtPsswd.getText());
+        try {
+            if (!txtUser.getText().equals("") && !txtPsswd.getText().equals("") && relational.login(txtUser.getText(), txtPsswd.getText())) {
+            //if (true) {
+                mainWnd.getChildren().remove(loginPanel);
+
+                mainWnd.getChildren().add(cboOptions);
+                mainWnd.getChildren().add(pnlSearch);
+                mainWnd.getChildren().add(resultTable);
+                mainWnd.getChildren().add(pnlBtns);
+            } else {
+                System.out.println("User not found");
+                lblErrLogin.setText("User or password not match");
+                lblErrLogin.setCenterShape(true);
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-        }*/
-
-        if (true /*relational.login(txtUser.getText(), txtPsswd.getText())*/) { //Enviar datos de login y comprobar
-            //mainWnd.getChildren().add(1, loginPanel);
-            mainWnd.getChildren().remove(loginPanel);
-
-            mainWnd.getChildren().add(cboOptions);
-            mainWnd.getChildren().add(pnlSearch);
-            mainWnd.getChildren().add(resultTable);
-            mainWnd.getChildren().add(pnlBtns);
-        } else {
-            // Mostrar msg
-            System.out.println("User not found");
-            lblErrLogin.setText("User or password not match");
-            lblErrLogin.setCenterShape(true);
         }
     }
 }

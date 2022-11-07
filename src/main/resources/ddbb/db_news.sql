@@ -27,7 +27,7 @@ use DB_USERS;
 create table users(
     id int auto_increment,
     username varchar(30) not null,
-    psd text,
+    psd blob not null,
 
     primary key(id)
 )engine innodb;

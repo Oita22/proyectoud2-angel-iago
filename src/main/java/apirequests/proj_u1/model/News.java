@@ -1,8 +1,13 @@
 package apirequests.proj_u1.model;
 
+import apirequests.proj_u1.mgmt.Request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
+import java.util.Date;
+import java.util.logging.SimpleFormatter;
 
 /**
  * News class model
@@ -113,6 +118,29 @@ public class News implements Serializable {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public void update(String category) {
+		Date date = new Date(System.currentTimeMillis());
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+		setDate(dateFormat.format(date));
+		setTime(timeFormat.format(date));
+		Request.updateFromDatabase(this, category);
+	}
+
+	public void save(String category) {
+		Date date = new Date(System.currentTimeMillis());
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+		setDate(dateFormat.format(date));
+		setTime(timeFormat.format(date));
+		// pendiente el resto de campos y bien los formatos
+		Request.updateFromDatabase(this, category);
+	}
+
+	public void delete(String category) {
+		Request.deleteFromDatabase(this, category);
 	}
 
 	@Override
