@@ -14,6 +14,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
@@ -31,6 +32,12 @@ public class MainView implements Initializable {
     @FXML
     private VBox mainWnd;
     @FXML
+    private Pane loginPanel;
+    @FXML
+    private Pane pnlBtns;
+    @FXML
+    private Pane pnlSearch;
+    @FXML
     private TableView resultTable;
     @FXML
     private ComboBox<String> cboOptions;
@@ -44,6 +51,12 @@ public class MainView implements Initializable {
     private Button btnLoadNews;
     @FXML
     private CheckBox chkSaveSession;
+    @FXML
+    private TextField txtUser;
+    @FXML
+    private PasswordField txtPsswd;
+    @FXML
+    private Label lblErrLogin;
 
     /**
      * Contains the News to be displayed in the table
@@ -63,6 +76,11 @@ public class MainView implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        mainWnd.getChildren().remove(pnlBtns);
+        mainWnd.getChildren().remove(resultTable);
+        mainWnd.getChildren().remove(pnlSearch);
+        mainWnd.getChildren().remove(cboOptions);
+
         btnSearch.setDisable(true);
         btnSaveSelected.setDisable(true);
         btnSaveAll.setDisable(true);
@@ -113,7 +131,7 @@ public class MainView implements Initializable {
             tableWidthPreferences();
 
             resultTable.setItems(tableNews);
-            relational.saveCache();
+            relational.saveState();
 
             btnSaveSelected.setDisable(false);
             btnSaveAll.setDisable(false);
@@ -200,4 +218,26 @@ public class MainView implements Initializable {
             ((TableColumn) resultTable.getColumns().get(i)).setPrefWidth(width[i]);
     }
 
+    public void loginAction(ActionEvent actionEvent) {
+        /*try {
+            System.out.println(txtUser.getText() + " - " + txtPsswd.getText());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }*/
+
+        if (true /*relational.login(txtUser.getText(), txtPsswd.getText())*/) { //Enviar datos de login y comprobar
+            //mainWnd.getChildren().add(1, loginPanel);
+            mainWnd.getChildren().remove(loginPanel);
+
+            mainWnd.getChildren().add(cboOptions);
+            mainWnd.getChildren().add(pnlSearch);
+            mainWnd.getChildren().add(resultTable);
+            mainWnd.getChildren().add(pnlBtns);
+        } else {
+            // Mostrar msg
+            System.out.println("User not found");
+            lblErrLogin.setText("User or password not match");
+            lblErrLogin.setCenterShape(true);
+        }
+    }
 }

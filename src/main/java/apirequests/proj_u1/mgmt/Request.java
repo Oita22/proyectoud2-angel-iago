@@ -5,17 +5,17 @@ import apirequests.proj_u1.model.RawNews;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.*;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Request {
-    private static String dbUrl = "jdbc:mysql://localhost:3306/db_news";
+    private static String DB_NEWS = "jdbc:mysql://localhost:3306/db_news";
+    private static String DB_USERS = "jdbc:mysql://localhost:3306/db_users";
     private static String usr = "root";
     private static String pswd = "root";
 
-    private static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(dbUrl, usr, pswd);
+    private static Connection getConnection(String db) throws SQLException {
+        return DriverManager.getConnection(db, usr, pswd);
     }
 
     /**
@@ -32,7 +32,7 @@ public class Request {
         rawNews.setSuccess(true);
         List<News> news = new ArrayList<>();
 
-        try (Connection connection = getConnection()) {
+        try (Connection connection = getConnection(DB_NEWS)) {
             Statement stm = connection.createStatement();
             rs = stm.executeQuery("SELECT * FROM NEWS WHERE '" + category + "' = category");
 

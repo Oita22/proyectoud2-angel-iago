@@ -17,3 +17,17 @@ create table news(
                             
     primary key(category, id)
 )engine innodb;
+
+
+
+drop database if exists DB_USERS;
+create database DB_USERS;
+use DB_USERS;
+
+create table users(
+    id int auto_increment,
+    username varchar(30) not null,
+    psd text,
+
+    primary key(id)
+)engine innodb;

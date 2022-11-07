@@ -147,7 +147,11 @@ public class Relational {
     /**
      * Saves on cache the object RawNews to be read on the next load of the program
      */
-    public void saveCache() {
+    public void saveState() {
          FileUtils.saveCache(rawNews);
+    }
+
+    public boolean login(String usr, String psd) {
+        return /*Request.checkLogin(usr, psd);*/ true;
     }
 }
