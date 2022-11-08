@@ -84,7 +84,7 @@ public class Request {
                 rs.updateString("CATEGORY", category);
                 rs.updateString("AUTHOR", newToModify.getAuthor());
                 rs.updateString("CONTENT", newToModify.getContent());
-                rs.updateString("CONTENT", newToModify.getContent());
+                rs.updateString("TITLE", newToModify.getTitle());
                 rs.updateString("`DATE`", newToModify.getDate());
                 rs.updateString("IMAGEURL", newToModify.getImageUrl());
                 rs.updateString("READMOREURL", newToModify.getReadMoreUrl());
@@ -128,6 +128,23 @@ public class Request {
         return successfulOperation;
     }
 
+    public static boolean saveFromDatabase(News newToSave, String category) {
+        boolean successfulOperation = false;
+
+        try (Connection connection = getConnection(DB_NEWS)) {
+            Statement stm = connection.createStatement();
+            stm.execute("INSERT INTO NEWS VALUES ('" + category + "', '" + newToSave.getAuthor() + "', '" + newToSave.getContent()
+                    + "', '" + newToSave.getDate() + "', '" + newToSave.getId() + "', '" + newToSave.getImageUrl() +
+                    "', '" + newToSave.getReadMoreUrl() + "', '" + newToSave.getTime() + "', '" + newToSave.getTitle() +
+                    "', '" + newToSave.getUrl() + "')");
+            successfulOperation = true;
+        } catch (SQLException error) {
+            System.out.println("Error al guardar la noticia en la base de datos: " + error);
+        }
+
+        return successfulOperation;
+    }
+
     /**
      * Checks if the user is in the database
      *
@@ -153,6 +170,24 @@ public class Request {
 
         return successfulOperation;
     }
+
+    /* public static boolean checkLogin(String username, String pswd) {  This method creates a user
+        pswd = encryptPswd(pswd);
+        boolean successfulOperation = false;
+
+        try (Connection connection = getConnection(DB_USERS)) {
+            Statement stm = connection.createStatement();
+            stm.execute("INSERT INTO USERS (username, psd) VALUES ('" + username + "', '" + pswd + "')");
+
+        } catch (SQLException error) {
+            System.out.println("Error al conectar con la base de datos: " + error);
+            System.exit(0);
+        }
+
+        System.out.println(pswd);
+
+        return successfulOperation;
+    } */
 
     /**
      * Encrypts the password before comparing it to the one saved in the database

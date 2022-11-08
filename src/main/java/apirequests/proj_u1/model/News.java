@@ -120,21 +120,30 @@ public class News implements Serializable {
 		this.url = url;
 	}
 
-	public void update(String category) {
+	public void update(String category, String title, String author, String content, String imageUrl, String url) {
+
 		Date date = new Date(System.currentTimeMillis());
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-		setDate(dateFormat.format(date));
-		setTime(timeFormat.format(date));
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd LLL yyyy, E");
+		SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm,E");
+
+		this.setTitle(title);
+		this.setAuthor(author);
+		this.setContent(content);
+		this.setUrl(url);
+		this.setImageUrl(imageUrl);
+		this.setReadMoreUrl(url);
+		this.setDate(dateFormat.format(date));
+		this.setTime(timeFormat.format(date));
+
 		Request.updateFromDatabase(this, category);
 	}
 
 	public void save(String category) {
 		Date date = new Date(System.currentTimeMillis());
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-		setDate(dateFormat.format(date));
-		setTime(timeFormat.format(date));
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd LLL yyyy, E");
+		SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm,E");
+		this.setDate(dateFormat.format(date));
+		this.setTime(timeFormat.format(date));
 		// pendiente el resto de campos y bien los formatos
 		Request.updateFromDatabase(this, category);
 	}
