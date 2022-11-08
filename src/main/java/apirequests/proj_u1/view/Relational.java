@@ -61,6 +61,8 @@ public class Relational {
         this.file = file;
     }
 
+    public RawNews getRawNews() { return this.rawNews; }
+
     public void setRawNews(RawNews rawNews) {
         this.rawNews = rawNews;
     }
@@ -153,5 +155,32 @@ public class Relational {
 
     public boolean login(String usr, String psd) {
         return Request.checkLogin(usr, psd);
+    }
+
+    public void executeOp(int op, News myNew, String category) {
+        switch (op) {
+            case 0:
+                // Update table
+                myNew.save(category);
+
+                break;
+            case 1:
+                // update table
+                myNew.update(category);
+
+                break;
+            case 2:
+                // eliminar noticia del array y update table
+                myNew.delete(category);
+
+                break;
+            default:
+                break;
+        }
+        // UPDATE TABLE
+    }
+
+    public void updateNewData(News myNew, String[] newData) {
+        myNew.updateData(newData);
     }
 }

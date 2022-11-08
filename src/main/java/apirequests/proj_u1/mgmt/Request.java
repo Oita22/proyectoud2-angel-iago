@@ -2,7 +2,6 @@ package apirequests.proj_u1.mgmt;
 
 import apirequests.proj_u1.model.News;
 import apirequests.proj_u1.model.RawNews;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -72,27 +71,23 @@ public class Request {
      * @param category The category of the new
      * @return true if the operation was successful or false if it wasn't
      */
-    public static boolean updateFromDatabase(News newToModify, String category) {
+    public static boolean update(News newToModify, String category) {
         boolean successfulOperation = false;
+        String query = "UPDATE news SET author=?, content=?, `date`=?, imageUrl=?, readMoreUrl=?, `time`=?, title=?, url=? WHERE (category='" + category + "') and (id='" + newToModify.getId() + "');";
 
         try (Connection connection = getConnection(DB_NEWS)) {
-            Statement stm = connection.createStatement();
-            ResultSet rs = stm.executeQuery("SELECT * FROM NEWS WHERE '" + category + "' = CATEGORY AND '" + newToModify.getId() + "' = ID");
+            PreparedStatement ps = connection.prepareStatement(query);
 
-            if (rs.next()) {
-                rs.updateString("ID", newToModify.getId());
-                rs.updateString("CATEGORY", category);
-                rs.updateString("AUTHOR", newToModify.getAuthor());
-                rs.updateString("CONTENT", newToModify.getContent());
-                rs.updateString("TITLE", newToModify.getTitle());
-                rs.updateString("`DATE`", newToModify.getDate());
-                rs.updateString("IMAGEURL", newToModify.getImageUrl());
-                rs.updateString("READMOREURL", newToModify.getReadMoreUrl());
-                rs.updateString("TIME", newToModify.getTime());
-                rs.updateString("URL", newToModify.getUrl());
-                successfulOperation = true;
-            }
+            ps.setString(1, newToModify.getAuthor());
+            ps.setString(2, newToModify.getContent());
+            ps.setString(3, newToModify.getDate());
+            ps.setString(4, newToModify.getImageUrl());
+            ps.setString(5, newToModify.getReadMoreUrl());
+            ps.setString(6, newToModify.getTime());
+            ps.setString(7, newToModify.getTitle());
+            ps.setString(8, newToModify.getUrl());
 
+            ps.executeUpdate();
         } catch (SQLException error) {
             System.out.println("Error al conectar con la base de datos: " + error);
             System.exit(0);
@@ -108,27 +103,25 @@ public class Request {
      * @param category The category of the new to be deleted
      * @return true if operation was successful or false if it wasn't
      */
-    public static boolean deleteFromDatabase(News newToDelete, String category) {
-        boolean successfulOperation = false;
+    public static boolean delete(News newToDelete, String category) {
+        boolean successfulOperation;
+        String query = "delete from news where id='" + newToDelete.getId() + "' and category='" + category + "';";
 
         try (Connection connection = getConnection(DB_NEWS)) {
             Statement stm = connection.createStatement();
-            ResultSet rs = stm.executeQuery("SELECT * FROM NEWS WHERE '" + category + "' = CATEGORY AND '" + newToDelete.getId() + "' = ID");
+            stm.execute(query);
 
-            if (rs.next()) {
-                rs.deleteRow();
-                successfulOperation = true;
-            }
-
+            successfulOperation = true;
         } catch (SQLException error) {
             System.out.println("Error al conectar con la base de datos: " + error);
-            System.exit(0);
+            Log.writeErr("Error al conectar con la base de datos: ", error);
+            successfulOperation = false;
         }
 
         return successfulOperation;
     }
 
-    public static boolean saveFromDatabase(News newToSave, String category) {
+    public static boolean insert(News newToSave, String category) {
         boolean successfulOperation = false;
 
         try (Connection connection = getConnection(DB_NEWS)) {

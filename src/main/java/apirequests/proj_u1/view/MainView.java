@@ -1,16 +1,12 @@
 package apirequests.proj_u1.view;
 
-import apirequests.proj_u1.Main;
 import apirequests.proj_u1.mgmt.Log;
 import apirequests.proj_u1.model.News;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,12 +18,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 /**
@@ -57,6 +53,8 @@ public class MainView implements Initializable {
     @FXML
     private Button btnLoadNews;
     @FXML
+    public Button btnCreate;
+    @FXML
     private CheckBox chkSaveSession;
     @FXML
     private TextField txtUser;
@@ -64,7 +62,6 @@ public class MainView implements Initializable {
     private PasswordField txtPsswd;
     @FXML
     private Label lblErrLogin;
-
     @FXML
     private AnchorPane ancView;
 
@@ -76,6 +73,30 @@ public class MainView implements Initializable {
      * Link between this class and the model
      */
     private Relational relational;
+    @FXML
+    private ComboBox<String> cboOptions1;
+    @FXML
+    public TextField txtTitle;
+    @FXML
+    public TextField txtAuthor;
+    @FXML
+    public TextArea txtContent;
+    @FXML
+    public TextField txtImageUrl;
+    @FXML
+    public TextField txtNewUrl;
+    @FXML
+    public ImageView imgViewImageShow;
+    @FXML
+    public Button btnUpdateDB;
+    private News currentNew;
+    enum PanelState {
+        LOGIN,
+        TABLE_VIEW,
+        DETAIL_VIEW,
+    }
+
+
 
 
     /**
@@ -86,15 +107,15 @@ public class MainView implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        mainWnd.getChildren().remove(pnlBtns);
-        mainWnd.getChildren().remove(resultTable);
-        mainWnd.getChildren().remove(pnlSearch);
-        mainWnd.getChildren().remove(cboOptions);
+        changePanels(PanelState.LOGIN, null);
+
+        txtContent.setWrapText(true);
 
         btnSearch.setDisable(true);
         btnSaveSelected.setDisable(true);
         btnSaveAll.setDisable(true);
         cboOptions.setItems(FXCollections.observableArrayList(News.categories));
+        cboOptions1.setItems(FXCollections.observableArrayList(News.categories));
         resultTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
@@ -188,31 +209,11 @@ public class MainView implements Initializable {
      */
     public void mouseShortcuts(MouseEvent mouseEvent) {
         try {
+            currentNew = (News) resultTable.getSelectionModel().getSelectedItem();
             if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
-                // Detailed View extends Stage -> No pone los datos de la News en los TextField -> error null
-                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("detailedView.fxml"));
-                Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-                DetailedView stage = new DetailedView((News) resultTable.getSelectionModel().getSelectedItem());
-                stage.setScene(scene);
-                stage.show();/**/
 
-                // Inicio desde esta clase
-                /*Stage stage = new Stage();
-                ancView = (AnchorPane) FXMLLoader.load(Main.class.getResource("detailedView.fxml"));
-                Scene scene = new Scene(ancView);
-                stage.setScene(scene);
-                stage.setTitle("Ventya");
-                stage.show();*/
-
-                // Iniciando el stage en la nueva clase para la vista_detalles
-                /*DetailedView detailedView = new DetailedView((News) resultTable.getSelectionModel().getSelectedItem());
-                detailedView.showStage();*/
-
-                // ...
-                /*DetailedView detailedView = new DetailedView((News) resultTable.getSelectionModel().getSelectedItem());
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("detailedView.fxml"));
-                loader.setController(detailedView);
-                Pane detail = loader.load();*/
+                changePanels(PanelState.DETAIL_VIEW, currentNew);
+                btnUpdateDB.setText("Update");
             }
 
             if (mouseEvent.getButton().equals(MouseButton.MIDDLE)) {
@@ -274,5 +275,117 @@ public class MainView implements Initializable {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+
+
+    private void changePanels(PanelState panelState, News myNew) {
+        switch (panelState) {
+            case LOGIN:
+                mainWnd.getChildren().remove(pnlBtns);
+                mainWnd.getChildren().remove(resultTable);
+                mainWnd.getChildren().remove(pnlSearch);
+                mainWnd.getChildren().remove(cboOptions);
+
+                mainWnd.getChildren().remove(ancView);
+                break;
+
+            case TABLE_VIEW:
+                mainWnd.getChildren().remove(loginPanel);
+
+                mainWnd.getChildren().add(cboOptions);
+                mainWnd.getChildren().add(pnlSearch);
+                mainWnd.getChildren().add(resultTable);
+                mainWnd.getChildren().add(pnlBtns);
+
+                mainWnd.getChildren().remove(ancView);
+                break;
+
+            case DETAIL_VIEW:
+                mainWnd.getChildren().remove(loginPanel);
+
+                mainWnd.getChildren().remove(pnlBtns);
+                mainWnd.getChildren().remove(resultTable);
+                mainWnd.getChildren().remove(pnlSearch);
+                mainWnd.getChildren().remove(cboOptions);
+
+                mainWnd.getChildren().add(ancView);
+                if (myNew != null) {
+                    cboOptions1.setValue(relational.getRawNews().getCategory());
+                    cboOptions1.setDisable(true);
+                    txtTitle.setText(myNew.getTitle());
+                    txtAuthor.setText(myNew.getAuthor());
+                    txtContent.setText(myNew.getContent());
+                    txtImageUrl.setText(myNew.getImageUrl());
+                    txtNewUrl.setText(myNew.getUrl());
+                    imgViewImageShow.setImage(new Image(myNew.getImageUrl()));
+                    imgViewImageShow.setFitWidth(206);
+                    imgViewImageShow.setFitHeight(333);
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    public void goBack() {
+        changePanels(PanelState.TABLE_VIEW, null);
+    }
+
+    public void createNews(ActionEvent actionEvent) {
+        changePanels(PanelState.DETAIL_VIEW, null);
+        btnUpdateDB.setText("Add new");
+        cleanFormNews();
+    }
+
+    public void updateNews(ActionEvent actionEvent) {
+        //changePanels(PanelState.DETAIL_VIEW, null);
+
+
+        if (btnUpdateDB.getText().equals("Add new")) {
+            String[] data = {txtTitle.getText(), txtAuthor.getText(), txtContent.getText(), txtImageUrl.getText(), txtNewUrl.getText()};
+            currentNew = new News();
+            // String title, String author, String content, String imageUrl, String url
+            String category = cboOptions1.getValue();
+            boolean correct = true;
+
+            for (String aux : data)
+                if (aux.equals("")) {
+                    correct = false;
+                    break;
+                }
+
+            if (correct && !category.equals("")) {
+                relational.updateNewData(currentNew, data);
+                relational.executeOp(0, currentNew, category);
+
+                //updateInfo(actionEvent);
+            }
+        } else {
+            String[] data = {txtTitle.getText(), txtAuthor.getText(), txtContent.getText(), txtImageUrl.getText(), txtNewUrl.getText()};
+            relational.updateNewData(currentNew, data);
+            relational.executeOp(1, currentNew, cboOptions1.getValue());
+        }
+
+        //updateInfo(actionEvent);
+    }
+
+    public void deleteNews(ActionEvent actionEvent) {
+        relational.executeOp(2, currentNew, cboOptions1.getValue());
+
+        //updateInfo(actionEvent);
+        changePanels(PanelState.TABLE_VIEW, null);
+    }
+
+    private void cleanFormNews() {
+        cboOptions1.setValue(News.categories[0]);
+        cboOptions1.setDisable(false);
+        txtTitle.setText("");
+        txtAuthor.setText("");
+        txtContent.setText("");
+        txtImageUrl.setText("");
+        txtNewUrl.setText("");
+        imgViewImageShow.setImage(null);
     }
 }

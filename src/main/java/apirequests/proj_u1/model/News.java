@@ -5,9 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.TimeZone;
 import java.util.Date;
-import java.util.logging.SimpleFormatter;
+import java.util.Random;
 
 /**
  * News class model
@@ -120,36 +119,49 @@ public class News implements Serializable {
 		this.url = url;
 	}
 
-	public void update(String category, String title, String author, String content, String imageUrl, String url) {
+
+	public void updateData(String[] newData) {
+		// String title, String author, String content, String imageUrl, String url
 
 		Date date = new Date(System.currentTimeMillis());
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd LLL yyyy, E");
 		SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm,E");
 
-		this.setTitle(title);
-		this.setAuthor(author);
-		this.setContent(content);
-		this.setUrl(url);
-		this.setImageUrl(imageUrl);
+
+		this.setTitle(newData[0]);
+		this.setAuthor(newData[1]);
+		this.setContent(newData[2]);
+		this.setImageUrl(newData[3]);
+		this.setUrl(newData[4]);
+
+
 		this.setReadMoreUrl(url);
 		this.setDate(dateFormat.format(date));
 		this.setTime(timeFormat.format(date));
+		if (id == null || id.equals(""))
+			id = generateId();
+	}
 
-		Request.updateFromDatabase(this, category);
+	public void update(String category) {
+		Request.update(this, category);
 	}
 
 	public void save(String category) {
-		Date date = new Date(System.currentTimeMillis());
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd LLL yyyy, E");
-		SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm,E");
-		this.setDate(dateFormat.format(date));
-		this.setTime(timeFormat.format(date));
-		// pendiente el resto de campos y bien los formatos
-		Request.updateFromDatabase(this, category);
+		Request.insert(this, category);
 	}
 
 	public void delete(String category) {
-		Request.deleteFromDatabase(this, category);
+		Request.delete(this, category);
+	}
+
+	private String generateId() {
+		String aux = "";
+		Random rd = new Random();
+
+		for (int i = 0; i < 38; i++)
+			aux += Integer.toHexString(rd.nextInt(16));
+
+		return aux;
 	}
 
 	@Override
