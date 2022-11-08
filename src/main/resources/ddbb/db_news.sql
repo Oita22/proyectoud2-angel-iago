@@ -31,3 +31,6 @@ create table users(
 
     primary key(id)
 )engine innodb;
+
+
+INSERT INTO `db_users`.`users` (`username`, `psd`) VALUES ('admin', 0xefbfbd6976efbfbd410415efbfbdefbfbd08efbfbd4defbfbd15dfb167efbfbdefbfbd73efbfbd4befbfbdefbfbd1f6f2aefbfbd48efbfbd18);

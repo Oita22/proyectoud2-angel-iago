@@ -72,7 +72,7 @@ public class Request {
      * @return true if the operation was successful or false if it wasn't
      */
     public static boolean update(News newToModify, String category) {
-        boolean successfulOperation = false;
+        boolean successfulOperation;
         String query = "UPDATE news SET author=?, content=?, `date`=?, imageUrl=?, readMoreUrl=?, `time`=?, title=?, url=? WHERE (category='" + category + "') and (id='" + newToModify.getId() + "');";
 
         try (Connection connection = getConnection(DB_NEWS)) {
@@ -88,9 +88,10 @@ public class Request {
             ps.setString(8, newToModify.getUrl());
 
             ps.executeUpdate();
+            successfulOperation = true;
         } catch (SQLException error) {
             System.out.println("Error al conectar con la base de datos: " + error);
-            System.exit(0);
+            successfulOperation = false;
         }
 
         return successfulOperation;
@@ -121,6 +122,13 @@ public class Request {
         return successfulOperation;
     }
 
+    /**
+     * Insert new to database
+     *
+     * @param newToSave The new to be inserted
+     * @param category The category of the new to be inserted
+     * @return true if operation was successful or false if it wasn't
+     */
     public static boolean insert(News newToSave, String category) {
         boolean successfulOperation = false;
 

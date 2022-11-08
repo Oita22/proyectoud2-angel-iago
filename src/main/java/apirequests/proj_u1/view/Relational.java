@@ -157,30 +157,34 @@ public class Relational {
         return Request.checkLogin(usr, psd);
     }
 
-    public void executeOp(int op, News myNew, String category) {
+    /**
+     * Switch. Execute the selected command to the database. First the current news object is updated with the passed
+     * data, and then the operation is executed.
+     *
+     * @param op Option to execute: 0- Insert new; 1-Update an existent News; 2- Delete a News
+     * @param myNew News Object on executing the option
+     * @param newData data to be replaced in the News
+     * @param category category to which the News Object belongs
+     * @return
+     */
+    public boolean executeOp(int op, News myNew, String[] newData, String category) {
+        boolean execution;
         switch (op) {
             case 0:
-                // Update table
-                myNew.save(category);
-
+                myNew.updateData(newData);
+                execution = myNew.save(category);
                 break;
             case 1:
-                // update table
-                myNew.update(category);
-
+                myNew.updateData(newData);
+                execution = myNew.update(category);
                 break;
             case 2:
-                // eliminar noticia del array y update table
-                myNew.delete(category);
-
+                execution = myNew.delete(category);
                 break;
             default:
+                execution = false;
                 break;
         }
-        // UPDATE TABLE
-    }
-
-    public void updateNewData(News myNew, String[] newData) {
-        myNew.updateData(newData);
+        return execution;
     }
 }

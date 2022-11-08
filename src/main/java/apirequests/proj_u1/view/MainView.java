@@ -89,14 +89,14 @@ public class MainView implements Initializable {
     public ImageView imgViewImageShow;
     @FXML
     public Button btnUpdateDB;
+    @FXML
+    public Label lblUpdateInfo;
     private News currentNew;
     enum PanelState {
         LOGIN,
         TABLE_VIEW,
         DETAIL_VIEW,
     }
-
-
 
 
     /**
@@ -211,16 +211,16 @@ public class MainView implements Initializable {
         try {
             currentNew = (News) resultTable.getSelectionModel().getSelectedItem();
             if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
-
-                changePanels(PanelState.DETAIL_VIEW, currentNew);
-                btnUpdateDB.setText("Update");
-            }
-
-            if (mouseEvent.getButton().equals(MouseButton.MIDDLE)) {
-                Clipboard clipboard = Clipboard.getSystemClipboard();
-                ClipboardContent content = new ClipboardContent();
-                content.putString(((News) resultTable.getSelectionModel().getSelectedItem()).getReadMoreUrl());
-                clipboard.setContent(content);
+                if (mouseEvent.getClickCount() == 2) {
+                    changePanels(PanelState.DETAIL_VIEW, currentNew);
+                    btnUpdateDB.setText("Update");
+                    lblUpdateInfo.setText("");
+                } else {
+                    Clipboard clipboard = Clipboard.getSystemClipboard();
+                    ClipboardContent content = new ClipboardContent();
+                    content.putString(((News) resultTable.getSelectionModel().getSelectedItem()).getReadMoreUrl());
+                    clipboard.setContent(content);
+                }
             }
 
             if (mouseEvent.getButton().equals(MouseButton.PRIMARY))
@@ -257,6 +257,11 @@ public class MainView implements Initializable {
             ((TableColumn) resultTable.getColumns().get(i)).setPrefWidth(width[i]);
     }
 
+    /**
+     * Execute the login at program startup. Do not let the program continue until the user is authenticated.
+     *
+     * @param actionEvent Action event from the UI
+     */
     public void loginAction(ActionEvent actionEvent) {
         try {
             if (!txtUser.getText().equals("") && !txtPsswd.getText().equals("") && relational.login(txtUser.getText(), txtPsswd.getText())) {
@@ -277,8 +282,12 @@ public class MainView implements Initializable {
         }
     }
 
-
-
+    /**
+     * Switches between the different panels available for the user interface. Login, Table results and Details View
+     *
+     * @param panelState PanelState to change
+     * @param myNew News object to be displayed in Detail View, if any
+     */
     private void changePanels(PanelState panelState, News myNew) {
         switch (panelState) {
             case LOGIN:
@@ -323,13 +332,17 @@ public class MainView implements Initializable {
                     imgViewImageShow.setFitHeight(333);
                 }
                 break;
-
             default:
                 break;
         }
     }
 
-    public void goBack() {
+    /**
+     * Returns to Table results.
+     *
+     * @param actionEvent Action event from the UI
+     */
+    public void goBack(ActionEvent actionEvent) {
         changePanels(PanelState.TABLE_VIEW, null);
     }
 
@@ -340,15 +353,13 @@ public class MainView implements Initializable {
     }
 
     public void updateNews(ActionEvent actionEvent) {
-        //changePanels(PanelState.DETAIL_VIEW, null);
-
+        String[] data = {txtTitle.getText(), txtAuthor.getText(), txtContent.getText(), txtImageUrl.getText(), txtNewUrl.getText()};
+        boolean isExecuted = false;
 
         if (btnUpdateDB.getText().equals("Add new")) {
-            String[] data = {txtTitle.getText(), txtAuthor.getText(), txtContent.getText(), txtImageUrl.getText(), txtNewUrl.getText()};
-            currentNew = new News();
-            // String title, String author, String content, String imageUrl, String url
             String category = cboOptions1.getValue();
             boolean correct = true;
+            currentNew = new News();
 
             for (String aux : data)
                 if (aux.equals("")) {
@@ -357,27 +368,46 @@ public class MainView implements Initializable {
                 }
 
             if (correct && !category.equals("")) {
-                relational.updateNewData(currentNew, data);
-                relational.executeOp(0, currentNew, category);
-
-                //updateInfo(actionEvent);
+                isExecuted = relational.executeOp(0, currentNew, data, category);
             }
         } else {
-            String[] data = {txtTitle.getText(), txtAuthor.getText(), txtContent.getText(), txtImageUrl.getText(), txtNewUrl.getText()};
-            relational.updateNewData(currentNew, data);
-            relational.executeOp(1, currentNew, cboOptions1.getValue());
+            cboOptions1.setValue(cboOptions.getValue());
+            isExecuted = relational.executeOp(1, currentNew, data, cboOptions1.getValue());
         }
 
-        //updateInfo(actionEvent);
+        updateLblInfo(isExecuted);
+        updateTableAfterMod(null);
     }
 
     public void deleteNews(ActionEvent actionEvent) {
-        relational.executeOp(2, currentNew, cboOptions1.getValue());
+        // En delete, que borre del array de news de RawNews la noticia selecciona y que recargue el array a la tabla
+        updateTableAfterMod(currentNew);
+        relational.executeOp(2, currentNew, null, cboOptions1.getValue());
 
-        //updateInfo(actionEvent);
         changePanels(PanelState.TABLE_VIEW, null);
     }
 
+
+    private void updateTableAfterMod(News myNew) {
+        cboOptions.setValue(cboOptions1.getValue());
+        //resultTable.getSelectionModel().getSelectedIndex();
+
+        if (myNew != null)
+            tableNews.remove(myNew);
+        else {
+            // En lugar de recargar la tabla -> Recargar solo el objeto news de la tabla
+            //int index = resultTable.getSelectionModel().getSelectedIndex();
+            tableNews = relational.getTableColumns(cboOptions1.getValue());
+            tableWidthPreferences();
+
+            resultTable.setItems(tableNews);
+            relational.saveState();
+        }
+    }
+
+    /**
+     * Reset Detail View fields to add a new News Object.
+     */
     private void cleanFormNews() {
         cboOptions1.setValue(News.categories[0]);
         cboOptions1.setDisable(false);
@@ -387,5 +417,21 @@ public class MainView implements Initializable {
         txtImageUrl.setText("");
         txtNewUrl.setText("");
         imgViewImageShow.setImage(null);
+        lblUpdateInfo.setText("");
+    }
+
+    /**
+     * Update the label to show a response of the executed action to the user.
+     *
+     * @param isSuccessful boolean, true: changes the text color to green; false: changes the text color to red
+     */
+    private void updateLblInfo(boolean isSuccessful) {
+        if (isSuccessful) {
+            lblUpdateInfo.setText("Operation successfully completed");
+            lblUpdateInfo.setStyle("-fx-text-fill : green;");
+        } else {
+            lblUpdateInfo.setText("Error during execution. Try again");
+            lblUpdateInfo.setStyle("-fx-text-fill : red;");
+        }
     }
 }

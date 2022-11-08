@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 /**
- * This project use a public News API to make the request based on the option selected by the user,
+ * This project use data from our database to make the request based on the option selected by the user,
  * and show the result on the table below.
  *
  * @author Angel Monroy and Iago Oitaven
