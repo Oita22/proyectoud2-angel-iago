@@ -1,13 +1,10 @@
 # Proyecto UD 1. Acceso a Datos
 ## Iago Oitaven & Ángel Monroy
 
-### Introducción al Proyecto, API y Postman
+### Introducción al Proyecto y Base de Datos
 
 El proyecto que hemos desenvuelto consiste en una aplicación que obtiene y muestra al usuario noticias en relación a 
-la categoría que este haya seleccionado previamente. La API utilizada es la siguiente: [Inshorts News API](https://github.com/cyberboysumanjay/Inshorts-News-API). 
-Pertenece a una página web de la cual obtenemos las 24 noticias más recientes filtradas por la ya mencionada categoría, 
-por lo que a fin de tratarlas más fácilmente son convertidas en un único objeto que contiene múltiples noticias cuando 
-llegan a la aplicación, tras lo cual son mostradas al usuario en formato de tabla con la cual puede interactuar para 
+la categoría que este haya seleccionado previamente. Para ello contamos con dos bases de datos  en las cuales guardamos a los usuarios que pueden acceder a la aplicación y las noticias. De esta última obtenemos los datos que son mostrados al usuario en formato de tabla con la cual puede interactuar para 
 ver la imágen asociada a la noticia, copiar la URL de esta o selecionar todas o un grupo de ellas para guardar en formato 
 binario, JSON, XML o texto plano. A su vez las noticias guardadas en XML, JSON o binario pueden volver a ser cargadas a 
 la aplicación para ser visualizadas. El programa también permite al usuario mantener su última sesión seleccionando 
@@ -37,7 +34,7 @@ apirequests.proj_u1/     # Directorio principal donde están todas las clases
 |- mgmt/                 # Directorio para gestinar las clases relacionadas con uso de ficheros y peticiones a la API
 |    └─ FileUtils.java   # Gestión de todo lo relacionado con escritura y lectura de ficheros y configuración
 |    └─ Log.java         # Escritura de log para errores y peticiones realizadas a la API
-|    └─ Request.java     # Realiza la petición a la API y mappeo del resultado a un objeto tipo RawNews 
+|    └─ Request.java     # Realiza la petición a la Base de Datos y mappeo del resultado a un objeto tipo RawNews 
 |- model/                # Directorio con los modelos de datos y configuración
 |    └─ Config.java      # Gestiona la configuración inicial y el autoguardado de la ultima sesión 
 |    └─ News.java        # Clase para los atributos de cada noticia
@@ -88,15 +85,13 @@ para ayudarse entre ellos. Puesto en porcentaje Iago Oitaven contribuyó un 55% 
   visualizar noticias aun sin conexión a internet.
 * Almacenamiento de último estado - Seleccionando la check box para mantener la sesión las últimas noticias vistas se 
   mantienen al reiniciar la aplicación.
+* Log in de usuarios, encriptando la contraseña antes de enviarla y guardarla en la base de datos para proporcionar seguridad
 
 ### Propuestas de mejora
 
 En un futuro se podría realizar una ampliación para visualizar en una ventana la noticia al completo al pinchar sobre ella, 
 permitiendo la visualización de la imagen junto con el cuerpo de la noticia. Otra mejora sería la de personalización de 
 la visualización, permitiendo escoger entre un tema oscuro o claro.
-
-### Referencia a la API
-Para más información sobre la API utilizada, puedes consultar la documentación de la misma en [Inshorts News API](https://github.com/cyberboysumanjay/Inshorts-News-API).
 
 ### Conclusión y opinión del trabajo realizado
 
