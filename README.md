@@ -52,11 +52,12 @@ java -jar proyectoud1-angel-iago.jar
 
 ### Manual de Usuario
 
-En sí la utilización de esta aplicación es de lo más sencilla e intuitiva. Lo único que podrá hacer el usuario al iniciar 
-el programa será elegir una categoría de noticias, tras lo cual, pulsando el botón de buscar, encontrará en la tabla una
-lista de noticias relacionadas, o cargar un fichero con noticias previamente descargadas.
+En sí la utilización de esta aplicación es de lo más sencilla e intuitiva. Al iniciar el programa el usuario 
+podrá buscar las noticias en la base de datos filtradas por categoría mediante el botón de búsqueda, cargar noticias
+guardadas o guardar las que puede ver en varios formatos. Otra cosa que puede hacer es guardar una nueva noticia
+ en la base de datos con el boton correspondiente.
 
-> ![inicio](https://user-images.githubusercontent.com/94072971/195633739-da53dc1d-3ad0-4271-99c8-5699cb09cc53.PNG)
+![Inicio](https://user-images.githubusercontent.com/105040748/200887301-f49311c5-c01b-442b-994b-7192b2c92d81.PNG)
 > Inicio del programa
 
 Una vez cargadas el usuario podrá copiar la URL para ver la noticia en la web, abrir la imagen de 
@@ -64,11 +65,16 @@ un artículo para visualizarla o guardar todas o el grupo que seleccione de noti
 texto plano. Habiendo hecho esto y teniendo un archivo de noticias al usuario se le presenta la opción de, seleccionando el 
 boton de cargar noticias, mostrando las noticias guardadas.
 
-> ![busqueda](https://user-images.githubusercontent.com/94072971/195633763-31e5a5cc-796a-4e0f-b94f-b16e8ccab569.PNG)
-> Búsqueda por categoría
 
-Otra funcionalidad más es la de restaurar la última sesión dejando seleccionado el check box designado, lo cual hace que 
-se recuperen las últimas noticias que se hayan cargado.
+![GuardarNoticia](https://user-images.githubusercontent.com/105040748/200889437-dd8e6411-0844-4cd8-8088-9080071debbe.PNG)
+> Guardar Noticia
+
+Para guardarla se han de rellenar los campos que aparecen
+
+![Noticia](https://user-images.githubusercontent.com/105040748/200888929-91f0d75a-1fcf-4d4a-89a6-6636559b652f.PNG)
+> Informacion de la Noticia
+
+Haciendo clic derecho sobre una noticia se puede obtener informacion adicional sobre ella, modificarla o borrarla.
 
 ### Reparto de tareas
 
