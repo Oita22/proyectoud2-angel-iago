@@ -12,3 +12,4 @@ create table users(
 
 
 INSERT INTO `db_users`.`users` (`username`, `psd`) VALUES ('admin', 0xefbfbd6976efbfbd410415efbfbdefbfbd08efbfbd4defbfbd15dfb167efbfbdefbfbd73efbfbd4befbfbdefbfbd1f6f2aefbfbd48efbfbd18);
+INSERT INTO `db_users`.`users` (`username`, `psd`) VALUES ('admin',_binary 'ŒivåµA½é½Mîß±g©ÈsüK¸¨o*´H©');
