@@ -30,7 +30,7 @@ public class Relational {
     /**
      * Time's column width
      */
-    private final double timeWidth = 60;
+    private final double timeWidth = 65;
     private TableColumn<Object, Object> titleColumn;
     private TableColumn<Object, Object> contentColumn;
     private TableColumn<Object, Object> dateColumn;

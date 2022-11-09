@@ -17,12 +17,19 @@ public class Request {
     private static String usr = "root";
     private static String pswd = "root";
 
+    /**
+     * Provides the connection to the database passed by param.
+     *
+     * @param db Database name
+     * @return Open connection to the database
+     * @throws SQLException .
+     */
     private static Connection getConnection(String db) throws SQLException {
         return DriverManager.getConnection(db, usr, pswd);
     }
 
     /**
-     * Performs the API request based on the selected category. May return null, if the request is unreadable, has
+     * Performs the database request based on the selected category. May return null, if the request is unreadable, has
      * an unknown structure or cannot connect.
      *
      * @param category News category to make a request about
@@ -171,24 +178,6 @@ public class Request {
 
         return successfulOperation;
     }
-
-    /* public static boolean checkLogin(String username, String pswd) {  This method creates a user
-        pswd = encryptPswd(pswd);
-        boolean successfulOperation = false;
-
-        try (Connection connection = getConnection(DB_USERS)) {
-            Statement stm = connection.createStatement();
-            stm.execute("INSERT INTO USERS (username, psd) VALUES ('" + username + "', '" + pswd + "')");
-
-        } catch (SQLException error) {
-            System.out.println("Error al conectar con la base de datos: " + error);
-            System.exit(0);
-        }
-
-        System.out.println(pswd);
-
-        return successfulOperation;
-    } */
 
     /**
      * Encrypts the password before comparing it to the one saved in the database

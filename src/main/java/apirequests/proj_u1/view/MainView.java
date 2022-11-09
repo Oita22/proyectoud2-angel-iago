@@ -91,6 +91,9 @@ public class MainView implements Initializable {
     public Button btnUpdateDB;
     @FXML
     public Label lblUpdateInfo;
+    /**
+     * Selected News from the table
+     */
     private News currentNew;
     enum PanelState {
         LOGIN,
@@ -265,7 +268,6 @@ public class MainView implements Initializable {
     public void loginAction(ActionEvent actionEvent) {
         try {
             if (!txtUser.getText().equals("") && !txtPsswd.getText().equals("") && relational.login(txtUser.getText(), txtPsswd.getText())) {
-            //if (true) {
                 mainWnd.getChildren().remove(loginPanel);
 
                 mainWnd.getChildren().add(cboOptions);
@@ -352,6 +354,11 @@ public class MainView implements Initializable {
         cleanFormNews();
     }
 
+    /**
+     * Allows to update the selected News or create a new one and refresh the table with the new content.
+     *
+     * @param actionEvent Action event from the UI
+     */
     public void updateNews(ActionEvent actionEvent) {
         String[] data = {txtTitle.getText(), txtAuthor.getText(), txtContent.getText(), txtImageUrl.getText(), txtNewUrl.getText()};
         boolean isExecuted = false;
@@ -369,39 +376,51 @@ public class MainView implements Initializable {
 
             if (correct && !category.equals("")) {
                 isExecuted = relational.executeOp(0, currentNew, data, category);
+                updateTableAfterMod(null, true);
             }
         } else {
             cboOptions1.setValue(cboOptions.getValue());
             isExecuted = relational.executeOp(1, currentNew, data, cboOptions1.getValue());
+            updateTableAfterMod(null, false);
         }
 
         updateLblInfo(isExecuted);
-        updateTableAfterMod(null);
+
     }
 
+    /**
+     * Delete selected News from the database.
+     *
+     * @param actionEvent Action event from the UI
+     */
     public void deleteNews(ActionEvent actionEvent) {
-        // En delete, que borre del array de news de RawNews la noticia selecciona y que recargue el array a la tabla
-        updateTableAfterMod(currentNew);
+        updateTableAfterMod(currentNew, false);
         relational.executeOp(2, currentNew, null, cboOptions1.getValue());
 
         changePanels(PanelState.TABLE_VIEW, null);
     }
 
 
-    private void updateTableAfterMod(News myNew) {
+    /**
+     * Refresh the table. If the NewsObject is not null, it simply deletes the row, in other cases, if makeConsult is
+     * true, it performs the database query again, otherwise it refresh the contents.
+     *
+     * @param myNew News Object to delete
+     * @param makeConsult true: performs the database query again; false: refresh the contents
+     */
+    private void updateTableAfterMod(News myNew, boolean makeConsult) {
         cboOptions.setValue(cboOptions1.getValue());
-        //resultTable.getSelectionModel().getSelectedIndex();
 
         if (myNew != null)
             tableNews.remove(myNew);
         else {
-            // En lugar de recargar la tabla -> Recargar solo el objeto news de la tabla
-            //int index = resultTable.getSelectionModel().getSelectedIndex();
-            tableNews = relational.getTableColumns(cboOptions1.getValue());
-            tableWidthPreferences();
-
-            resultTable.setItems(tableNews);
-            relational.saveState();
+            if (makeConsult) {
+                tableNews = relational.getTableColumns(cboOptions1.getValue());
+                tableWidthPreferences();
+                resultTable.setItems(tableNews);
+                relational.saveState();
+            } else
+                resultTable.refresh();
         }
     }
 

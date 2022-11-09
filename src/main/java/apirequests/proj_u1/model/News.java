@@ -130,7 +130,7 @@ public class News implements Serializable {
 
 		Date date = new Date(System.currentTimeMillis());
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd LLL yyyy, E");
-		SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm,E");
+		SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
 
 
 		this.setTitle(newData[0]);
