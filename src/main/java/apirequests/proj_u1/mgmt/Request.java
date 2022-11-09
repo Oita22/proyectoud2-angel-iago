@@ -12,9 +12,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Request {
+    /**
+     * Database News URL connection
+     */
     private final static String DB_NEWS = "jdbc:mysql://localhost:3306/db_news";
+    /**
+     * Database Users URL connection
+     */
     private final static String DB_USERS = "jdbc:mysql://localhost:3306/db_users";
+    /**
+     * Database user credential
+     */
     private static String usr = "root";
+    /**
+     * Database password credential
+     */
     private static String pswd = "root";
 
     /**
