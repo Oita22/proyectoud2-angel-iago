@@ -59,6 +59,8 @@ mysql -u [nombreDeUsuario] -p [Contraseña]
 mysql source [elScript].sql;
 ```
 
+Tras eso se tiene que hacer login. El usuario creado por defecto es "admin" con contraseña "admin".
+
 En sí la utilización de esta aplicación es de lo más sencilla e intuitiva. Al iniciar el programa el usuario 
 podrá buscar las noticias en la base de datos filtradas por categoría mediante el botón de búsqueda, cargar noticias
 guardadas o guardar las que puede ver en varios formatos. Otra cosa que puede hacer es guardar una nueva noticia
