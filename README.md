@@ -52,6 +52,13 @@ java -jar proyectoud1-angel-iago.jar
 
 ### Manual de Usuario
 
+Antes de iniciar la aplicación se debería cargar el script que se adjunta con datos de prueba para poder visualizar
+cómo funcionaría en un caso real la aplicación. Este se puede ejecutar con:
+```shell
+mysql -u [nombreDeUsuario] -p [Contraseña]
+mysql source [elScript].sql;
+```
+
 En sí la utilización de esta aplicación es de lo más sencilla e intuitiva. Al iniciar el programa el usuario 
 podrá buscar las noticias en la base de datos filtradas por categoría mediante el botón de búsqueda, cargar noticias
 guardadas o guardar las que puede ver en varios formatos. Otra cosa que puede hacer es guardar una nueva noticia
@@ -74,7 +81,8 @@ Para guardarla se han de rellenar los campos que aparecen
 ![Noticia](https://user-images.githubusercontent.com/105040748/200888929-91f0d75a-1fcf-4d4a-89a6-6636559b652f.PNG)
 > Informacion de la Noticia
 
-Haciendo clic derecho sobre una noticia se puede obtener informacion adicional sobre ella, modificarla o borrarla.
+Haciendo click derecho sobre una noticia se puede copiar la noticia, y haciendo doble click derecho se puede obtener 
+informacion adicional sobre ella, modificarla o borrarla.
 
 ### Reparto de tareas
 
