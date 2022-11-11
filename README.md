@@ -1,5 +1,5 @@
-# Proyecto UD 1. Acceso a Datos
-## Iago Oitaven & Ángel Monroy
+# Proyecto UD 2. Acceso a Datos
+## Iago Oitavén & Ángel Monroy
 
 ### Introducción al Proyecto y Base de Datos
 
@@ -10,9 +10,6 @@ binario, JSON, XML o texto plano. A su vez las noticias guardadas en XML, JSON o
 la aplicación para ser visualizadas. El programa también permite al usuario mantener su última sesión seleccionando 
 una check box, lo cual hace que una vez vuelva a abrirlo restaure las últimas noticias que haya visto.
 
-> ![postman_science](https://user-images.githubusercontent.com/105040748/195174379-b9c6c825-9c95-4da9-9be4-62c8b4e48363.PNG)
-> Captura de la respuesta en POSTMAN
-
 ### Manual técnico
 
 El proyecto compartimentaliza la vista, la lógica y las funciones que controlen las acciones como acceso guardado o carga 
@@ -21,7 +18,7 @@ en caso de requerirlo. Tras lo cual la vista se actualiza con lo que la lógica 
 sistema, una encapsulación del codigo que lo hace fácil de mantener y ampliar. En sí el código se divide en tres paquetes: 
 view, donde se almacena la lógica y relación con la interfaz gráfica en forma de dos clases: MainView y Relational; model, 
 donde se encuentran las clases Config, News y RawNews (el formato en el que se guardan los conjuntos de noticias) y mgmt, 
-donde se encuentran Log: para la creación de archivos log, Request: para las solicitudes al API, y FileUtils: que se encarga 
+donde se encuentran Log: para la creación de archivos log, Request: para las solicitudes a las bases de datos, y FileUtils: que se encarga 
 de la modificación de ficheros.
 Para clonar el repositorio:
 ```
@@ -31,14 +28,14 @@ Estructura de directorios:
 ```
 apirequests.proj_u1/     # Directorio principal donde están todas las clases
 |- Main.java             # Inicio y carga de la configuración guardada
-|- mgmt/                 # Directorio para gestinar las clases relacionadas con uso de ficheros y peticiones a la API
+|- mgmt/                 # Directorio para gestinar las clases relacionadas con uso de ficheros y peticiones a las bases de datos
 |    └─ FileUtils.java   # Gestión de todo lo relacionado con escritura y lectura de ficheros y configuración
-|    └─ Log.java         # Escritura de log para errores y peticiones realizadas a la API
-|    └─ Request.java     # Realiza la petición a la Base de Datos y mappeo del resultado a un objeto tipo RawNews 
+|    └─ Log.java         # Escritura de un log de errores
+|    └─ Request.java     # Realiza las peticiones a las bases de datos
 |- model/                # Directorio con los modelos de datos y configuración
 |    └─ Config.java      # Gestiona la configuración inicial y el autoguardado de la ultima sesión 
 |    └─ News.java        # Clase para los atributos de cada noticia
-|    └─ RawNews.java     # Modelo creado para mappear la respuesta de la API
+|    └─ RawNews.java     # Modelo adaptado para mappear la respuesta de la base de datos
 |- view/                 # Directorio para gestión de la interfaz gráfica
      └─ MainView.java    # Clase que gestiona todos los elementos que contiene la vista
      └─ Relational       # Controlador, prepara los datos para mostrar
@@ -52,14 +49,17 @@ java -jar proyectoud1-angel-iago.jar
 
 ### Manual de Usuario
 
-Antes de iniciar la aplicación se debería cargar el script que se adjunta con datos de prueba para poder visualizar
-cómo funcionaría en un caso real la aplicación. Este se puede ejecutar con:
-```shell
+Antes de iniciar la aplicación se debería cargar el script que se adjunta, usando MySQL, con datos de prueba para poder visualizar
+cómo funcionaría en un caso real la aplicación. Este se puede ejecutar desde el Workbench o desde terminal con:
+```
 mysql -u [nombreDeUsuario] -p [Contraseña]
 mysql source [elScript].sql;
 ```
 
-Tras eso se tiene que hacer login. El usuario creado por defecto es "admin" con contraseña "admin".
+Tras eso se tiene que hacer login usando las siguientes credenciales:
+| Usuario | Contraseña |
+|  :---:  |    :---:   |
+| admin   | admin      |
 
 En sí la utilización de esta aplicación es de lo más sencilla e intuitiva. Al iniciar el programa el usuario 
 podrá buscar las noticias en la base de datos filtradas por categoría mediante el botón de búsqueda, cargar noticias
@@ -76,29 +76,31 @@ boton de cargar noticias, mostrando las noticias guardadas.
 
 
 ![GuardarNoticia](https://user-images.githubusercontent.com/105040748/200889437-dd8e6411-0844-4cd8-8088-9080071debbe.PNG)
-> Guardar Noticia
+> Creación de una nueva noticia
 
 Para guardarla se han de rellenar los campos que aparecen
 
 ![Noticia](https://user-images.githubusercontent.com/105040748/200888929-91f0d75a-1fcf-4d4a-89a6-6636559b652f.PNG)
-> Informacion de la Noticia
+> Actualización o borrado de una noticia
 
-Haciendo click derecho sobre una noticia se puede copiar la noticia, y haciendo doble click derecho se puede obtener 
-informacion adicional sobre ella, modificarla o borrarla.
+En lo relativo a la usabilidad, podemos: haciendo click derecho sobre una noticia copiar la URL a la fuente,
+con doble click derecho acceder al menú para modificarla o borrarla y con doble click izquierdo se abre una nueva ventana 
+para leer el resumen de la misma con comodidad.
 
 ### Reparto de tareas
 
-En este proyecto Iago Oitaven se encargo de la organización, estructura, interfaz grafica, lógica y solicitud a la API; 
-mientras que Ángel Monroy realizo la parte de control donde se encuentran los métodos de guardado y cargado de noticias 
-y fichero de configuración, log para la creacion de ficheros log e implementacion del sistema de configuración. Ambos 
-modificaron y vieron el código de otro permitiendoles obtener un conocimiento general de la aplicación que les sirvió 
+En este proyecto Iago Oitavén se encargo de la organización, estructura, interfaz grafica, lógica y petición a la base de datos; 
+mientras que Ángel Monroy realizo la parte de control donde se encuentran los métodos de guardado y cargado de noticias, 
+fichero de configuración, log para la creacion de ficheros log, implementacion del sistema de carga y peticiones a la base de datos.
+Ambos modificaron y vieron el código de otro permitiendoles obtener un conocimiento general de la aplicación que les sirvió 
 para ayudarse entre ellos. Puesto en porcentaje Iago Oitaven contribuyó un 55% mientras que Ángel Monroy un 45% 
 
 ### Extras
 
 * Control de errores - En caso de error se crea un archivo log con la información del error para que el usuario visualice.
-* Uso de la aplicación offline - Habiendo guardado antes las noticas o selecionando mantener la última sesión se pueden 
-  visualizar noticias aun sin conexión a internet.
+  Además de multiples avisos durante el uso de la aplicación mostrando al usuario de la correcta realización de las acciones.
+* Uso de la aplicación, accesibilidad - Habiendo guardado antes las noticias en fichero o selecionando mantener la última sesión se pueden 
+  volver a visualizar las noticias.
 * Almacenamiento de último estado - Seleccionando la check box para mantener la sesión las últimas noticias vistas se 
   mantienen al reiniciar la aplicación.
 * Log in de usuarios, encriptando la contraseña antes de enviarla y guardarla en la base de datos para proporcionar seguridad
