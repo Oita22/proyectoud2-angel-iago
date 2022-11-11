@@ -113,9 +113,9 @@ la visualización, permitiendo escoger entre un tema oscuro o claro.
 
 ### Conclusión y opinión del trabajo realizado
 
-La experiencia de realizar un programa con interfaz gráfico para la optención de datos a través de una API pública ha demostrado 
+La experiencia de realizar un programa con interfaz gráfico para la optención de datos a través de una base de datos ha demostrado 
 ser un reto interesante; el uso de JavaFX, si bien algo obtuso al principio, ha demostrado ser intuitivo y limpio en la presentación, 
-y la utilización de una API ha servido para demostrar su importancia a la hora del envío de datos e información. En definitiva 
-consideramos que el proyecto ha logrado su objetivo de demostrar la utilidad e importancia de los datos almacenados en archivos JSON 
-y XML. El proyecto en sí nos tomó unas 12~14 horas y, si bien hay partes que se pueden pulir y mejorar, pensamos que para el 
-rango y exigencias es un notable alto.
+y la utilización de las bases de datos ha servido para demostrar su importancia a la hora de la gestión de datos e información. En definitiva 
+consideramos que el proyecto ha logrado su objetivo de demostrar la utilidad e importancia de los datos almacenados en bases de datos. 
+El proyecto en sí nos tomó unas 12~14 horas y, si bien hay partes que se pueden pulir y mejorar, pensamos que para el rango y exigencias 
+es un notable alto.
